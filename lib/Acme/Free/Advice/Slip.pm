@@ -32,7 +32,7 @@ Acme::Free::Advice::Slip - Seek Advice from the Advice Slip API
 
 =head1 SYNOPSIS
 
-    use Acme::Free::Advice::Slip;
+    use Acme::Free::Advice::Slip qw[advice];
     say advice( 224 )->{advice};
 
 =head1 DESCRIPTION
@@ -45,8 +45,8 @@ These functions may be imported by name or with the C<:all> tag.
 
 =head2 C<advice( [...] )>
 
-    my $slip = advice( ); # Random advice
-    my $slip = advice( 20 ); # Advice by ID
+    my $widsom = advice( ); # Random advice
+    my $advice = advice( 20 ); # Advice by ID
 
 Seek advice.
 

@@ -6,7 +6,7 @@ Acme::Free::Advice::Slip - Seek Advice from the Advice Slip API
 # SYNOPSIS
 
 ```perl
-use Acme::Free::Advice::Slip;
+use Acme::Free::Advice::Slip qw[advice];
 say advice( 224 )->{advice};
 ```
 
@@ -21,8 +21,8 @@ These functions may be imported by name or with the `:all` tag.
 ## `advice( [...] )`
 
 ```perl
-my $slip = advice( ); # Random advice
-my $slip = advice( 20 ); # Advice by ID
+my $widsom = advice( ); # Random advice
+my $advice = advice( 20 ); # Advice by ID
 ```
 
 Seek advice.
