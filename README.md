@@ -75,3 +75,8 @@ This library is free software; you can redistribute it and/or modify it under th
 # AUTHOR
 
 Sanko Robinson <sanko@cpan.org>
+
+## ...but why?
+
+I'm inflicting this upon the world because [oodler577](https://github.com/oodler577/) invited me to help expand Perl's
+coverage of smaller open APIs. Blame them or [join us](https://github.com/oodler577/FreePublicPerlAPIs) in the effort.

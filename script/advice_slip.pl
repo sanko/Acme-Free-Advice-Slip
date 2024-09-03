@@ -1,5 +1,6 @@
 use lib '../lib';
 use v5.38;
+no warnings 'experimental::builtin';
 use Acme::Free::Advice::Slip;
 use Getopt::Long;
 use Pod::Usage;
@@ -12,13 +13,22 @@ use Pod::Usage;
 #~ @ARGV = qw[-search time -json];
 #~ @ARGV = qw[-id 5 -json];
 #~ @ARGV = qw[-json -id 333];
+#~ @ARGV = qw[-json -id 2];
 #~ @ARGV = qw[-help];
 #
 my $raw = 0;
 my ( $id, $query );
 
-sub _echo ($slip) {    # JSON::Tiny is loaded in Acme::Free::Advice::Slip anyway
-    $raw ? JSON::Tiny::encode_json($slip) : $slip->{advice};
+sub _echo ($slip) {    # JSON::Tiny is loaded in Acme::Free::Advice::* anyway
+    $raw ?
+        JSON::Tiny::encode_json(
+        builtin::blessed $slip ? {%$slip} : [
+            map {
+                {%$_}
+            } @$slip
+        ]
+        ) :
+        $slip;
 }
 GetOptions( 'json' => \$raw, 'help' => sub { pod2usage( -exitval => 1 ) }, 'id=i' => \$id, 'search=s' => \$query );
 if ( defined $query ) {

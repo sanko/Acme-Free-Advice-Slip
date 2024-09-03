@@ -5,20 +5,23 @@ package Acme::Free::Advice::Slip 1.0 {    # https://api.adviceslip.com/
     use parent 'Exporter';
     our %EXPORT_TAGS = ( all => [ our @EXPORT_OK = qw[advice search] ] );
     #
+    use overload '""' => sub ( $s, $u, $b ) { $s->{advice} // () };
+    #
     sub _http ($uri) {
-        CORE::state $http //= HTTP::Tiny->new( agent => sprintf '%s/%.2f ', __PACKAGE__, our $VERSION );
+        state $http
+            //= HTTP::Tiny->new( default_headers => { Accept => 'application/json' }, agent => sprintf '%s/%.2f ', __PACKAGE__, our $VERSION );
         my $res = $http->get($uri);    # {success} is true even when advice is not found but we'll at least know when we have valid JSON
         $res->{success} ? decode_json( $res->{content} ) : ();
     }
     #
     sub advice ( $slip_id //= () ) {
         my $res = _http( 'https://api.adviceslip.com/advice' . ( $slip_id ? '/' . $slip_id : '' ) );
-        $res->{slip} // ();
+        defined $res->{slip} ? bless $res->{slip}, __PACKAGE__ : ();
     }
 
     sub search ($query) {
         my $res = _http( 'https://api.adviceslip.com/advice/search/' . $query );
-        @{ $res->{slips} // [] };
+        map { bless $_, __PACKAGE__ } @{ $res->{slips} // [] };
     }
 }
 1;
@@ -104,5 +107,10 @@ L<AdviceSlip.com|https://adviceslip.com/> is brought to you by L<Tom Kiss|https:
 =head1 AUTHOR
 
 Sanko Robinson E<lt>sanko@cpan.orgE<gt>
+
+=head2 ...but why?
+
+I'm inflicting this upon the world because L<oodler577|https://github.com/oodler577/> invited me to help expand Perl's
+coverage of smaller open APIs. Blame them or L<join us|https://github.com/oodler577/FreePublicPerlAPIs> in the effort.
 
 =cut
